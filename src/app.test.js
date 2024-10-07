@@ -1,64 +1,74 @@
 // to avoid eslint errors
 import { describe, expect, test } from "@jest/globals";
-import Ship from "./Ship";
-// describe("Ship", () => {
-//     test("isSunk();", () => {
-//         const ship = Ship(2);
-//         ship.hit();
-//         expect(ship.IsSunk()).toBe(false);
-//         ship.hit();
-//         expect(ship.IsSunk()).toBe(true);
-//     });
-// });
+import Ship from "./Ship.js";
+import { Gameboard } from "./Gameboard.js";
+describe("Ship", () => {
+    test("isSunk();", () => {
+        const ship = Ship(2);
+        ship.hit();
+        expect(ship.IsSunk()).toBe(false);
+        ship.hit();
+        expect(ship.IsSunk()).toBe(true);
+    });
+});
 
 describe("Gameboard", () => {
-    test("placeShip();", () => {
-        // testing placing a ship with a length of 2 somewhere
-        // testing if I can overlap
-        // testing if I can place a ship within 1 from it
+    test("Place a ship somewhere legal", () => {
+        const expectedBoard = [...Gameboard().getBoard()];
+        const board = Gameboard().getBoard();
+        const x = 2;
+        const y = 2;
+        const length = 2;
+        const ship = Ship(length);
+
+        expectedBoard.find((square) => square.x === x && square.y === y).ship =
+            ship;
+        expectedBoard.find(
+            (square) => square.x === x + 1 && square.y === y
+        ).ship = ship;
+        const obj = Gameboard().placeShip(board, x, y, 2, "H");
+        expect(JSON.stringify(obj.getNewBoard())).toBe(
+            JSON.stringify(expectedBoard)
+        );
+        expect(obj.errorMsg).toBeNull();
+        expect(obj.changed).toBeTruthy();
+    });
+
+    test("Placing a ship where there is already a ship", () => {
         const gameboard = Gameboard();
         const board = gameboard.getBoard();
         const expectedBoard = gameboard.getBoard();
         const x = 2;
         const y = 2;
         const length = 2;
-        const index = board.findIndex((square) => {
-            square.x === x && square.y === y;
-        });
-        expectedBoard[index].ship = Ship(length);
-        expect(placeShip(board, x, y, 2, "H").board).toBe(expectedBoard);
-        expect(placeShip(board, x, y, 2, "H").changed).toBe(board);
-        expect(placeShip(board, x + 1, y, 2, "H").changed).toBe(board);
-        expect(placeShip(board, x - 1, y, 2, "H").changed).toBe(board);
-        expect(placeShip(board, x + length, y, 2, "H").changed).toBe(board);
-        expect(placeShip(board, x, y + 1, 2, "H").changed).toBe(board);
-        expect(placeShip(board, x, y - 1, 2, "H").changed).toBe(board);
-        expect(placeShip(board, x + 1, y - 1, 2, "H").changed).toBe(board);
-        expect(placeShip(board, x - 1, y - 1, 2, "H").changed).toBe(board);
-        expect(placeShip(board, x + length, y - 1, 2, "H").changed).toBe(board);
-        expect(placeShip(board, x + 1, y + 1, 2, "H").changed).toBe(board);
-        expect(placeShip(board, x - 1, y + 1, 2, "H").changed).toBe(board);
-        expect(placeShip(board, x + length, y + 1, 2, "H").changed).toBe(board);
+        const ship = Ship(length);
+        gameboard.placeShip(board, x, y, 5, "H");
+        expect(gameboard.placeShip(board, x, y, 2, "H").changed).toBeFalsy();
+        expect(gameboard.placeShip(board, x, y, 2, "H").errorMsg).toBeTruthy();
+
+        expect(gameboard.placeShip(board, x, y, 2, "H").errorMsg).toBeTruthy();
+        expect(
+            gameboard.placeShip(board, x + 1, y, 2, "H").errorMsg
+        ).toBeTruthy();
+        expect(
+            gameboard.placeShip(board, x + 2, y, 2, "H").errorMsg
+        ).toBeTruthy();
+        expect(
+            gameboard.placeShip(board, x + 3, y, 2, "H").errorMsg
+        ).toBeTruthy();
+        expect(
+            gameboard.placeShip(board, x + 4, y, 2, "H").errorMsg
+        ).toBeTruthy();
     });
-    test("placeShip(); 2", () => {
-        //testing if you can place a ship overboard
+    test("Placing a ship outside the board", () => {
         const gameboard = Gameboard();
         const board = gameboard.getBoard();
-        const expectedBoard = gameboard.getBoard();
-        const x = 19;
-        const y = 12;
-        const length = 2;
-        expect(placeShip(board, x, y, 2, "H").changed).toBe(false);
-    });
-    test("placeShip(); 2", () => {
-        //testing if you can place a ship overboard
-        const gameboard = Gameboard();
-        const board = gameboard.getBoard();
-        const expectedBoard = gameboard.getBoard();
-        const x = 19;
-        const y = 12;
-        const length = 2;
-        expect(placeShip(board, x, y, 2, "H").changed).toBe(false);
+        expect(gameboard.placeShip(board, 19, 12, 2, "H").changed).toBeFalsy();
+        expect(
+            gameboard.placeShip(board, 19, 12, 2, "H").errorMsg
+        ).toBeTruthy();
+        expect(gameboard.placeShip(board, 8, 2, 3, "H").errorMsg).toBeTruthy();
+        expect(gameboard.placeShip(board, 5, 8, 3, "V").errorMsg).toBeTruthy();
     });
 
     // test("receiveAttack();", () => {

@@ -1,5 +1,5 @@
 export default function Ship(length) {
-    if (length < 1 || length > 4) {
+    if (2 > length > 5) {
         throw new Error("Ship length should be between 1 & 4");
     }
 
