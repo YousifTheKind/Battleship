@@ -13,7 +13,7 @@ export function Gameboard() {
         };
     }
     const placeShip = (board, x, y, length, orientation) => {
-        const newBoard = board;
+        const newBoard = [...board];
         let changed = false;
         let errorMsg = null;
         function checkValidity() {
@@ -64,21 +64,23 @@ export function Gameboard() {
                 const ship = Ship(length);
                 for (let i = 0; i < length; i++) {
                     const targetSquare = newBoard.find(
-                        (square) => square.x === x + i && square.y === y
-                    );
-                    targetSquare.ship = ship;
-                }
-                changed = true;
-            }
-            if (orientation === "V") {
-                const ship = Ship(length);
-                for (let i = 0; i < length; i++) {
-                    const targetSquare = newBoard.find(
                         (square) => square.x === x && square.y === y + i
                     );
                     targetSquare.ship = ship;
                 }
                 changed = true;
+                ships.push(ship);
+            }
+            if (orientation === "V") {
+                const ship = Ship(length);
+                for (let i = 0; i < length; i++) {
+                    const targetSquare = newBoard.find(
+                        (square) => square.x === x + i && square.y === y
+                    );
+                    targetSquare.ship = ship;
+                }
+                changed = true;
+                ships.push(ship);
             }
         }
 
@@ -86,10 +88,56 @@ export function Gameboard() {
         return { getNewBoard, changed, errorMsg };
     };
 
-    const receiveAttack = () => "hi";
-    const checkWinner = () => "hi";
+    const receiveAttack = (board, x, y) => {
+        const newBoard = [...board];
+        let errorMsg = null;
+        let validAttack = null;
+        let sunk = null;
+        const getNewBoard = () => newBoard;
+        const square = newBoard.find(
+            (square) => square.x === x && square.y === y
+        );
+        function checkValidity() {
+            if (x > 9 || x < 0 || y > 9 || y < 0) {
+                errorMsg = "Attack is off the board.";
+                return false;
+            }
+            if (square.hit || square.miss) {
+                errorMsg = "Square has already been attacked.";
+                return false;
+            }
+            return true;
+        }
+
+        if (checkValidity()) {
+            validAttack = true;
+            if (square.ship) {
+                square.ship.hit();
+                sunk = square.ship.IsSunk();
+                if (sunk) sunkenShips.push(square.ship);
+                square.hit = true;
+            }
+            if (!square.ship) {
+                square.miss = true;
+            }
+        }
+        return {
+            getNewBoard,
+            errorMsg,
+            validAttack,
+            sunk,
+        };
+    };
+    const checkWinner = () => {
+        if (sunkenShips.length >= 5) {
+            return true;
+        }
+
+        return false;
+    };
     const getBoard = () => board;
 
     return { getBoard, placeShip, receiveAttack, checkWinner };
 }
-Gameboard();
+// const b = Gameboard().placeShip(Gameboard().getBoard(), 0, 0, 2, "H");
+// console.log(b.getNewBoard());
