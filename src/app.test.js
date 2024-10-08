@@ -14,7 +14,6 @@ describe("Ship", () => {
 
 describe("Gameboard", () => {
     describe("placeShip", () => {
-        beforeEach(() => {});
         const gameboard = Gameboard();
         const board = gameboard.getBoard();
         const expectedBoard = [...Gameboard().getBoard()];
@@ -71,10 +70,10 @@ describe("Gameboard", () => {
                 gameboard.placeShip(board, 19, 12, 2, "H").errorMsg
             ).toBeTruthy();
             expect(
-                gameboard.placeShip(board, 8, 2, 3, "H").errorMsg
+                gameboard.placeShip(board, 2, 8, 3, "H").errorMsg
             ).toBeTruthy();
             expect(
-                gameboard.placeShip(board, 5, 8, 3, "V").errorMsg
+                gameboard.placeShip(board, 8, 2, 3, "V").errorMsg
             ).toBeTruthy();
         });
     });

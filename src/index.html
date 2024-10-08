@@ -3,7 +3,46 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Project Title</title>
+        <title>Battleship</title>
     </head>
-    <body></body>
+    <body>
+        <div class="container">
+            <header>
+                <div>Battleship</div>
+                <div class="instructions-bar">
+                    <div class="instructions-message">Place Your Ships</div>
+                </div>
+            </header>
+            <div class="main">
+                <div class="real-player-container">
+                    <div class="real-player-board">Board</div>
+                    <div class="real-player-board-text">Your Board</div>
+                </div>
+                <div class="ships-form">
+                    <form action="">
+                        <label for="row">Row</label>
+                        <input type="number" min="0" max="9" name="row" />
+                        <label for="column">Column</label>
+                        <input type="number" min="0" max="9" name="column" />
+                        <select name="size" id="select-size">
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                        <button class="place-ship-button">Place Ship</button>
+                    </form>
+                </div>
+                <div class="bot-player-board-container">
+                    <div class="bot-player-board">Ops Board</div>
+                    <div class="bot-player-board-text">Opponent's Board</div>
+                </div>
+            </div>
+            <div class="action-buttons">
+                <button class="play-button">Play</button
+                ><button class="reset-button">Reset</button>
+            </div>
+        </div>
+    </body>
 </html>

@@ -17,14 +17,7 @@ export function Gameboard() {
         let changed = false;
         let errorMsg = null;
         function checkValidity() {
-            if (
-                x > 9 ||
-                x < 0 ||
-                y > 9 ||
-                y < 0 ||
-                x + (length - 1) > 9 ||
-                y + (length - 1) > 9
-            ) {
+            if (x > 9 || x < 0 || y > 9 || y < 0) {
                 errorMsg = "You're going overboard!";
                 return false;
             } else if (2 > length > 5) {
@@ -36,10 +29,16 @@ export function Gameboard() {
                 return false;
             }
             if (orientation == "H") {
+                if (y + (length - 1) > 9) {
+                    errorMsg = "You're going overboard!";
+                    return false;
+                }
+
                 for (let i = 0; i < length; i++) {
                     const targetSquare = newBoard.find(
-                        (square) => square.x === x + i && square.y === y
+                        (square) => square.x === x && square.y === y + i
                     );
+
                     if (targetSquare.ship) {
                         errorMsg = "There is already a ship there!";
                         return false;
@@ -47,9 +46,14 @@ export function Gameboard() {
                 }
             }
             if (orientation == "V") {
+                if (x + (length - 1) > 9) {
+                    errorMsg = "You're going overboard!";
+                    return false;
+                }
+
                 for (let i = 0; i < length; i++) {
                     const targetSquare = newBoard.find(
-                        (square) => square.x === x && square.y === y + i
+                        (square) => square.x === x + i && square.y === y
                     );
                     if (targetSquare.ship) {
                         errorMsg = "There is already a ship there!";
@@ -139,5 +143,3 @@ export function Gameboard() {
 
     return { getBoard, placeShip, receiveAttack, checkWinner };
 }
-// const b = Gameboard().placeShip(Gameboard().getBoard(), 0, 0, 2, "H");
-// console.log(b.getNewBoard());
