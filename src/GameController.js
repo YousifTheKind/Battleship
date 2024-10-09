@@ -4,11 +4,11 @@ function newGame() {
     const realPlayer = Player();
     const realPlayerGameboard = realPlayer.Gameboard;
     const realPlayerBoard = realPlayerGameboard.getBoard();
-    realPlayerGameboard.placeShip(realPlayerBoard, 0, 0, 2, "H");
+    realPlayerGameboard.placeShip(realPlayerBoard, 2, 0, 2, "H");
     realPlayerGameboard.placeShip(realPlayerBoard, 2, 2, 3, "H");
-    realPlayerGameboard.placeShip(realPlayerBoard, 4, 2, 3, "H");
-    realPlayerGameboard.placeShip(realPlayerBoard, 6, 2, 4, "H");
-    realPlayerGameboard.placeShip(realPlayerBoard, 8, 2, 5, "H");
+    realPlayerGameboard.placeShip(realPlayerBoard, 2, 4, 3, "H");
+    realPlayerGameboard.placeShip(realPlayerBoard, 2, 6, 4, "H");
+    realPlayerGameboard.placeShip(realPlayerBoard, 2, 8, 5, "H");
     const botPlayer = Player();
     const botPlayerGameboard = botPlayer.Gameboard;
     const botPlayerBoard = botPlayerGameboard.getBoard();

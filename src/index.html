@@ -8,14 +8,14 @@
     <body>
         <div class="container">
             <header>
-                <div>Battleship</div>
+                <div class="logo">Battleship</div>
                 <div class="instructions-bar">
                     <div class="instructions-message">Place Your Ships</div>
                 </div>
             </header>
             <div class="main">
                 <div class="real-player-container">
-                    <div class="real-player-board">Board</div>
+                    <div class="real-player-board"></div>
                     <div class="real-player-board-text">Your Board</div>
                 </div>
                 <div class="ships-form">
@@ -24,6 +24,7 @@
                         <input type="number" min="0" max="9" name="row" />
                         <label for="column">Column</label>
                         <input type="number" min="0" max="9" name="column" />
+                        <label for="size">Select Ship Size</label>
                         <select name="size" id="select-size">
                             <option value="2">2</option>
                             <option value="3">3</option>

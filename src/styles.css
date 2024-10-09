@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap");
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -5,4 +7,86 @@
 }
 
 :root {
+}
+body {
+    display: flex;
+    justify-content: center;
+    background-color: #d9d9d9;
+    font-family: "Noto Sans", sans-serif;
+}
+.container {
+    display: flex;
+    flex-direction: column;
+}
+header {
+    margin-top: 15px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+.main {
+    display: flex;
+    gap: 75px;
+}
+.logo {
+    font-size: 64px;
+    font-weight: 700;
+}
+.instructions-bar {
+    background-color: #9a9a9a;
+    width: 256px;
+    height: 24px;
+}
+.instructions-message {
+    color: white;
+}
+.real-player-square {
+    width: 40px;
+    height: 40px;
+}
+.bot-player-square {
+    width: 40px;
+    height: 40px;
+}
+.real-player-board {
+    display: grid;
+    grid: repeat(10, 1fr) / repeat(10, 1fr);
+    width: 400px;
+}
+.bot-player-board {
+    display: grid;
+    grid: repeat(10, 1fr) / repeat(10, 1fr);
+    width: 400px;
+}
+.ships-form form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.bot-player-board-text {
+    text-align: center;
+}
+.real-player-board-text {
+    text-align: center;
+}
+
+.index {
+    position: relative;
+}
+.row {
+    right: 4em;
+    text-align: right;
+
+    height: 1em;
+}
+.column {
+    bottom: 3em;
+}
+.bot-player-square:first-child > .column {
+    bottom: 3.5em;
+}
+.real-player-square:first-child > .column {
+    bottom: 3.5em;
 }

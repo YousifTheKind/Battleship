@@ -29,14 +29,14 @@ export function Gameboard() {
                 return false;
             }
             if (orientation == "H") {
-                if (y + (length - 1) > 9) {
+                if (x + (length - 1) > 9) {
                     errorMsg = "You're going overboard!";
                     return false;
                 }
 
                 for (let i = 0; i < length; i++) {
                     const targetSquare = newBoard.find(
-                        (square) => square.x === x && square.y === y + i
+                        (square) => square.x === x + i && square.y === y
                     );
 
                     if (targetSquare.ship) {
@@ -46,14 +46,14 @@ export function Gameboard() {
                 }
             }
             if (orientation == "V") {
-                if (x + (length - 1) > 9) {
+                if (y + (length - 1) > 9) {
                     errorMsg = "You're going overboard!";
                     return false;
                 }
 
                 for (let i = 0; i < length; i++) {
                     const targetSquare = newBoard.find(
-                        (square) => square.x === x + i && square.y === y
+                        (square) => square.x === x && square.y === y + i
                     );
                     if (targetSquare.ship) {
                         errorMsg = "There is already a ship there!";
@@ -68,7 +68,7 @@ export function Gameboard() {
                 const ship = Ship(length);
                 for (let i = 0; i < length; i++) {
                     const targetSquare = newBoard.find(
-                        (square) => square.x === x && square.y === y + i
+                        (square) => square.x === x + i && square.y === y
                     );
                     targetSquare.ship = ship;
                 }
@@ -79,7 +79,7 @@ export function Gameboard() {
                 const ship = Ship(length);
                 for (let i = 0; i < length; i++) {
                     const targetSquare = newBoard.find(
-                        (square) => square.x === x + i && square.y === y
+                        (square) => square.x === x && square.y === y + i
                     );
                     targetSquare.ship = ship;
                 }

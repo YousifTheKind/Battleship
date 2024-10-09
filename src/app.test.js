@@ -27,7 +27,7 @@ describe("Gameboard", () => {
                 (square) => square.x === x && square.y === y
             ).ship = ship;
             expectedBoard.find(
-                (square) => square.x === x && square.y === y + 1
+                (square) => square.x === x + 1 && square.y === y
             ).ship = ship;
             const obj = Gameboard().placeShip(board, x, y, 2, "H");
             expect(JSON.stringify(obj.getNewBoard())).toBe(
@@ -48,16 +48,16 @@ describe("Gameboard", () => {
                 gameboard.placeShip(board, x, y, 2, "H").errorMsg
             ).toBeTruthy();
             expect(
-                gameboard.placeShip(board, x, y + 1, 2, "H").errorMsg
+                gameboard.placeShip(board, x + 1, y, 2, "H").errorMsg
             ).toBeTruthy();
             expect(
-                gameboard.placeShip(board, x, y + 2, 2, "H").errorMsg
+                gameboard.placeShip(board, x + 2, y, 2, "H").errorMsg
             ).toBeTruthy();
             expect(
-                gameboard.placeShip(board, x, y + 3, 2, "H").errorMsg
+                gameboard.placeShip(board, x + 3, y, 2, "H").errorMsg
             ).toBeTruthy();
             expect(
-                gameboard.placeShip(board, x, y + 4, 2, "H").errorMsg
+                gameboard.placeShip(board, x + 4, y, 2, "H").errorMsg
             ).toBeTruthy();
         });
         test("Placing a ship outside the board", () => {
@@ -70,10 +70,10 @@ describe("Gameboard", () => {
                 gameboard.placeShip(board, 19, 12, 2, "H").errorMsg
             ).toBeTruthy();
             expect(
-                gameboard.placeShip(board, 2, 8, 3, "H").errorMsg
+                gameboard.placeShip(board, 8, 2, 3, "H").errorMsg
             ).toBeTruthy();
             expect(
-                gameboard.placeShip(board, 8, 2, 3, "V").errorMsg
+                gameboard.placeShip(board, 2, 8, 3, "V").errorMsg
             ).toBeTruthy();
         });
     });
@@ -138,9 +138,9 @@ describe("Gameboard", () => {
             const length = 3;
             gameboard.placeShip(board, x, y, length, "V");
             gameboard.receiveAttack(board, x, y);
-            gameboard.receiveAttack(board, x + 1, y);
+            gameboard.receiveAttack(board, x, y + 1);
             const newBoard = gameboard
-                .receiveAttack(board, x + 2, y)
+                .receiveAttack(board, x, y + 2)
                 .getNewBoard();
             const square = newBoard.find(
                 (square) => square.x === x && square.y === y
@@ -154,27 +154,28 @@ describe("Gameboard", () => {
             const board = gameboard.getBoard();
 
             gameboard.placeShip(board, 0, 0, 2, "H");
-            gameboard.placeShip(board, 1, 0, 3, "H");
-            gameboard.placeShip(board, 2, 0, 3, "H");
-            gameboard.placeShip(board, 3, 0, 4, "H");
-            gameboard.placeShip(board, 4, 0, 5, "H");
+            gameboard.placeShip(board, 0, 1, 3, "H");
+            gameboard.placeShip(board, 0, 2, 3, "H");
+            gameboard.placeShip(board, 0, 3, 4, "H");
+            gameboard.placeShip(board, 0, 4, 5, "H");
             gameboard.receiveAttack(board, 0, 0);
-            gameboard.receiveAttack(board, 0, 1);
             gameboard.receiveAttack(board, 1, 0);
+            gameboard.receiveAttack(board, 0, 1);
             gameboard.receiveAttack(board, 1, 1);
-            gameboard.receiveAttack(board, 1, 2);
-            gameboard.receiveAttack(board, 2, 0);
             gameboard.receiveAttack(board, 2, 1);
+            gameboard.receiveAttack(board, 0, 2);
+            gameboard.receiveAttack(board, 1, 2);
             gameboard.receiveAttack(board, 2, 2);
-            gameboard.receiveAttack(board, 3, 0);
-            gameboard.receiveAttack(board, 3, 1);
-            gameboard.receiveAttack(board, 3, 2);
+            gameboard.receiveAttack(board, 0, 3);
+            gameboard.receiveAttack(board, 1, 3);
+            gameboard.receiveAttack(board, 2, 3);
             gameboard.receiveAttack(board, 3, 3);
-            gameboard.receiveAttack(board, 4, 0);
-            gameboard.receiveAttack(board, 4, 1);
-            gameboard.receiveAttack(board, 4, 2);
-            gameboard.receiveAttack(board, 4, 3);
+            gameboard.receiveAttack(board, 0, 4);
+            gameboard.receiveAttack(board, 1, 4);
+            gameboard.receiveAttack(board, 2, 4);
+            gameboard.receiveAttack(board, 3, 4);
             gameboard.receiveAttack(board, 4, 4);
+
             expect(gameboard.checkWinner()).toBeTruthy();
         });
         test("Check winner when one part attacked", () => {
@@ -190,21 +191,21 @@ describe("Gameboard", () => {
             const board = gameboard.getBoard();
 
             gameboard.placeShip(board, 0, 0, 2, "H");
-            gameboard.placeShip(board, 1, 0, 3, "H");
-            gameboard.placeShip(board, 2, 0, 3, "H");
-            gameboard.placeShip(board, 3, 0, 4, "H");
-            gameboard.placeShip(board, 4, 0, 5, "H");
+            gameboard.placeShip(board, 0, 1, 3, "H");
+            gameboard.placeShip(board, 0, 2, 3, "H");
+            gameboard.placeShip(board, 0, 3, 4, "H");
+            gameboard.placeShip(board, 0, 4, 5, "H");
             gameboard.receiveAttack(board, 0, 0);
-            gameboard.receiveAttack(board, 0, 1);
             gameboard.receiveAttack(board, 1, 0);
+            gameboard.receiveAttack(board, 0, 1);
             gameboard.receiveAttack(board, 1, 1);
-            gameboard.receiveAttack(board, 1, 2);
-            gameboard.receiveAttack(board, 2, 0);
             gameboard.receiveAttack(board, 2, 1);
+            gameboard.receiveAttack(board, 0, 2);
+            gameboard.receiveAttack(board, 1, 2);
             gameboard.receiveAttack(board, 2, 2);
-            gameboard.receiveAttack(board, 3, 0);
-            gameboard.receiveAttack(board, 3, 1);
-            gameboard.receiveAttack(board, 3, 2);
+            gameboard.receiveAttack(board, 0, 3);
+            gameboard.receiveAttack(board, 1, 3);
+            gameboard.receiveAttack(board, 2, 3);
             gameboard.receiveAttack(board, 3, 3);
             expect(gameboard.checkWinner()).toBeFalsy();
         });
