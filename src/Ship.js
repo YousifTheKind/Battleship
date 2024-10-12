@@ -12,9 +12,7 @@ export default function Ship(length) {
         return length === timesHit ? true : false;
     };
     const getTimesHit = () => timesHit;
-    const getLength = () => length;
     return {
-        getLength,
         getTimesHit,
         hit,
         IsSunk,

@@ -29,6 +29,7 @@ header {
 .main {
     display: flex;
     gap: 75px;
+    flex-wrap: wrap;
 }
 .logo {
     font-size: 64px;
@@ -45,6 +46,7 @@ header {
 .real-player-square {
     width: 40px;
     height: 40px;
+    border: 1px solid #797979;
 }
 .bot-player-square {
     width: 40px;
@@ -63,8 +65,10 @@ header {
 .ships-form form {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 10px;
+    margin-top: 24px;
 }
+
 .bot-player-board-text {
     text-align: center;
 }
@@ -74,6 +78,7 @@ header {
 
 .index {
     position: relative;
+    z-index: -1;
 }
 .row {
     right: 4em;
@@ -89,4 +94,100 @@ header {
 }
 .real-player-square:first-child > .column {
     bottom: 3.5em;
+}
+#ship-hit::before {
+    content: "❌";
+    width: 200px;
+    height: 200px;
+}
+#ship-hit {
+    border: red 1px solid;
+}
+
+#ship-miss {
+    background-color: rgb(255, 255, 118) !important;
+    content: "s";
+}
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+.place-ship-button {
+    margin-top: 32px;
+}
+.disabled-square {
+    pointer-events: none;
+    cursor: not-allowed;
+    opacity: 0.65;
+    filter: alpha(opacity=65);
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+.ships {
+    background-color: rgb(77, 77, 81, 0.5) !important;
+}
+.place-ship-button,
+.reset-button,
+.play-button {
+    appearance: none;
+    background-color: #2c2c2c;
+    border: 1px solid rgba(27, 31, 35, 0.15);
+    border-radius: 6px;
+    box-shadow: rgba(27, 31, 35, 0.1) 0 1px 0;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial,
+        sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+    padding: 6px 16px;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.place-ship-button:focus:not(:focus-visible):not(.focus-visible),
+.reset-button:focus:not(:focus-visible):not(.focus-visible),
+.play-button:focus:not(:focus-visible):not(.focus-visible) {
+    box-shadow: none;
+    outline: none;
+}
+
+.place-ship-button:hover,
+.reset-button:hover,
+.play-button:hover {
+    background-color: #000000;
+}
+
+.place-ship-button:focus,
+.reset-button:focus,
+.play-button:focus {
+    box-shadow: rgba(46, 164, 79, 0.4) 0 0 0 3px;
+    outline: none;
+}
+
+.place-ship-button:disabled,
+.reset-button:disabled,
+.play-button:disabled {
+    background-color: #94d3a2;
+    border-color: rgba(27, 31, 35, 0.1);
+    color: rgba(255, 255, 255, 0.8);
+    cursor: default;
+}
+
+.place-ship-button:active,
+.reset-button:active,
+.play-button:active {
+    background-color: #298e46;
+    box-shadow: rgba(20, 70, 32, 0.2) 0 1px 0 inset;
 }

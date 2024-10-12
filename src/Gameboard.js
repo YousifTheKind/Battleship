@@ -2,18 +2,16 @@ import Ship from "./Ship.js";
 export function Gameboard() {
     const board = [];
     const ships = [];
-    const sunkenShips = [];
     for (let i = 0; i < 100; i++) {
         board[i] = {
-            x: Math.floor(i / 10),
-            y: i % 10,
+            x: i % 10,
+            y: Math.floor(i / 10),
             ship: null,
             hit: false,
             miss: false,
         };
     }
     const placeShip = (board, x, y, length, orientation) => {
-        const newBoard = [...board];
         let changed = false;
         let errorMsg = null;
         function checkValidity() {
@@ -35,7 +33,7 @@ export function Gameboard() {
                 }
 
                 for (let i = 0; i < length; i++) {
-                    const targetSquare = newBoard.find(
+                    const targetSquare = board.find(
                         (square) => square.x === x + i && square.y === y
                     );
 
@@ -52,7 +50,7 @@ export function Gameboard() {
                 }
 
                 for (let i = 0; i < length; i++) {
-                    const targetSquare = newBoard.find(
+                    const targetSquare = board.find(
                         (square) => square.x === x && square.y === y + i
                     );
                     if (targetSquare.ship) {
@@ -67,7 +65,7 @@ export function Gameboard() {
             if (orientation === "H") {
                 const ship = Ship(length);
                 for (let i = 0; i < length; i++) {
-                    const targetSquare = newBoard.find(
+                    const targetSquare = board.find(
                         (square) => square.x === x + i && square.y === y
                     );
                     targetSquare.ship = ship;
@@ -78,7 +76,7 @@ export function Gameboard() {
             if (orientation === "V") {
                 const ship = Ship(length);
                 for (let i = 0; i < length; i++) {
-                    const targetSquare = newBoard.find(
+                    const targetSquare = board.find(
                         (square) => square.x === x && square.y === y + i
                     );
                     targetSquare.ship = ship;
@@ -88,19 +86,13 @@ export function Gameboard() {
             }
         }
 
-        const getNewBoard = () => newBoard;
-        return { getNewBoard, changed, errorMsg };
+        return { changed, errorMsg };
     };
 
     const receiveAttack = (board, x, y) => {
-        const newBoard = [...board];
         let errorMsg = null;
-        let validAttack = null;
-        let sunk = null;
-        const getNewBoard = () => newBoard;
-        const square = newBoard.find(
-            (square) => square.x === x && square.y === y
-        );
+        const square = board.find((square) => square.x == x && square.y == y);
+
         function checkValidity() {
             if (x > 9 || x < 0 || y > 9 || y < 0) {
                 errorMsg = "Attack is off the board.";
@@ -114,11 +106,8 @@ export function Gameboard() {
         }
 
         if (checkValidity()) {
-            validAttack = true;
             if (square.ship) {
                 square.ship.hit();
-                sunk = square.ship.IsSunk();
-                if (sunk) sunkenShips.push(square.ship);
                 square.hit = true;
             }
             if (!square.ship) {
@@ -126,18 +115,13 @@ export function Gameboard() {
             }
         }
         return {
-            getNewBoard,
             errorMsg,
-            validAttack,
-            sunk,
         };
     };
     const checkWinner = () => {
-        if (sunkenShips.length >= 5) {
-            return true;
+        if (ships.length == 5) {
+            return ships.every((ship) => ship.IsSunk());
         }
-
-        return false;
     };
     const getBoard = () => board;
 

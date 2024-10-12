@@ -13,33 +13,36 @@ describe("Ship", () => {
 });
 
 describe("Gameboard", () => {
-    describe("placeShip", () => {
-        const gameboard = Gameboard();
-        const board = gameboard.getBoard();
-        const expectedBoard = [...Gameboard().getBoard()];
-        const x = 2;
-        const y = 2;
-        test("Place a ship somewhere legal", () => {
-            const length = 2;
-            const ship = Ship(length);
+    let gameboard;
+    let board;
+    let indexOfSquare;
+    let x;
+    let y;
+    beforeEach(() => {
+        gameboard = Gameboard();
+        board = gameboard.getBoard();
+        x = 2;
+        y = 2;
+        indexOfSquare = board.findIndex(
+            (square) => square.x === x && square.y === y
+        );
+    });
 
-            expectedBoard.find(
-                (square) => square.x === x && square.y === y
-            ).ship = ship;
-            expectedBoard.find(
-                (square) => square.x === x + 1 && square.y === y
-            ).ship = ship;
-            const obj = Gameboard().placeShip(board, x, y, 2, "H");
-            expect(JSON.stringify(obj.getNewBoard())).toBe(
-                JSON.stringify(expectedBoard)
-            );
-            expect(obj.errorMsg).toBeNull();
-            expect(obj.changed).toBeTruthy();
+    describe("placeShip", () => {
+        test("Place a ship horizontally", () => {
+            gameboard.placeShip(board, x, y, 2, "H");
+
+            expect(board[indexOfSquare].ship).toBeTruthy();
+            expect(board[indexOfSquare + 1].ship).toBeTruthy();
+        });
+        test("Place a ship vertically", () => {
+            gameboard.placeShip(board, x, y, 2, "V");
+
+            expect(board[indexOfSquare].ship).toBeTruthy();
+            expect(board[indexOfSquare + 10].ship).toBeTruthy();
         });
 
         test("Placing a ship where there is already a ship", () => {
-            const gameboard = Gameboard();
-            const board = gameboard.getBoard();
             gameboard.placeShip(board, x, y, 5, "H");
             expect(
                 gameboard.placeShip(board, x, y, 2, "H").changed
@@ -61,8 +64,6 @@ describe("Gameboard", () => {
             ).toBeTruthy();
         });
         test("Placing a ship outside the board", () => {
-            const gameboard = Gameboard();
-            const board = gameboard.getBoard();
             expect(
                 gameboard.placeShip(board, 19, 12, 2, "H").changed
             ).toBeFalsy();
@@ -79,73 +80,34 @@ describe("Gameboard", () => {
     });
     describe("receiveAttack", () => {
         test("Attacking a square off the board", () => {
-            const gameboard = Gameboard();
-            const board = gameboard.getBoard();
-            expect(
-                gameboard.receiveAttack(board, 55, 2).validAttack
-            ).toBeFalsy();
             expect(gameboard.receiveAttack(board, 55, 2).errorMsg).toBeTruthy();
         });
         test("Attacking a ship", () => {
-            const gameboard = Gameboard();
-            const board = gameboard.getBoard();
-            const expectedBoard = [...board];
-
-            const x = 0;
-            const y = 1;
-            const length = 2;
-            gameboard.placeShip(board, x, y, length, "V");
-
-            expectedBoard
-                .find((square) => square.x === x && square.y === y)
-                .ship.hit();
-
-            const obj = gameboard.receiveAttack(board, x, y);
-            expect(obj.getNewBoard()).toEqual(expectedBoard);
-            expect(obj.validAttack).toBeTruthy();
-            expect(obj.errorMsg).toBeFalsy();
+            gameboard.placeShip(board, x, y, 3, "H");
+            expect(board[indexOfSquare].ship.getTimesHit()).toEqual(0);
+            const attackObject = gameboard.receiveAttack(board, x, y);
+            expect(board[indexOfSquare].ship.getTimesHit()).toEqual(1);
+            expect(board[indexOfSquare].hit).toBeTruthy();
+            expect(board[indexOfSquare].miss).toBeFalsy();
+            expect(attackObject.errorMsg).toBeFalsy();
         });
         test("Attacking a square with no ship", () => {
-            const gameboard = Gameboard();
-            const board = gameboard.getBoard();
-            const expectedBoard = [...board];
-            const x = 2;
-            const y = 2;
-            expectedBoard.find((square) => square.x === x && square.y === y)
-                .miss;
-            const obj = gameboard.receiveAttack(board, x, y);
-            expect(obj.getNewBoard()).toStrictEqual(expectedBoard);
-            expect(obj.validAttack).toBeTruthy();
-            expect(obj.errorMsg).toBeFalsy();
+            const attackObject = gameboard.receiveAttack(board, x, y);
+            expect(board[indexOfSquare].miss).toBeTruthy();
+            expect(board[indexOfSquare].hit).toBeFalsy();
+            expect(attackObject.errorMsg).toBeFalsy();
         });
         test("Attacking a square that's been attacked before", () => {
-            const gameboard = Gameboard();
-            const board = gameboard.getBoard();
-            const newBoard = gameboard.receiveAttack(board, 2, 2).getNewBoard();
-            expect(
-                gameboard.receiveAttack(newBoard, 2, 2).errorMsg
-            ).toBeTruthy();
-            expect(
-                gameboard.receiveAttack(newBoard, 2, 2).validAttack
-            ).toBeFalsy();
+            gameboard.receiveAttack(board, x, y);
+            expect(gameboard.receiveAttack(board, 2, 2).errorMsg).toBeTruthy();
         });
 
         test("Attack a square until ship is sunk", () => {
-            const gameboard = Gameboard();
-            const board = gameboard.getBoard();
-            const x = 2;
-            const y = 2;
-            const length = 3;
-            gameboard.placeShip(board, x, y, length, "V");
+            gameboard.placeShip(board, x, y, 3, "V");
             gameboard.receiveAttack(board, x, y);
             gameboard.receiveAttack(board, x, y + 1);
-            const newBoard = gameboard
-                .receiveAttack(board, x, y + 2)
-                .getNewBoard();
-            const square = newBoard.find(
-                (square) => square.x === x && square.y === y
-            );
-            expect(square.ship.IsSunk()).toBeTruthy();
+            gameboard.receiveAttack(board, x, y + 2);
+            expect(board[indexOfSquare].ship.IsSunk()).toBeTruthy();
         });
     });
     describe("check winner", () => {
@@ -154,59 +116,39 @@ describe("Gameboard", () => {
             const board = gameboard.getBoard();
 
             gameboard.placeShip(board, 0, 0, 2, "H");
-            gameboard.placeShip(board, 0, 1, 3, "H");
-            gameboard.placeShip(board, 0, 2, 3, "H");
-            gameboard.placeShip(board, 0, 3, 4, "H");
-            gameboard.placeShip(board, 0, 4, 5, "H");
+            gameboard.placeShip(board, 0, 1, 2, "H");
+            gameboard.placeShip(board, 0, 2, 2, "H");
+            gameboard.placeShip(board, 0, 3, 2, "H");
+            gameboard.placeShip(board, 0, 4, 2, "H");
             gameboard.receiveAttack(board, 0, 0);
             gameboard.receiveAttack(board, 1, 0);
             gameboard.receiveAttack(board, 0, 1);
             gameboard.receiveAttack(board, 1, 1);
-            gameboard.receiveAttack(board, 2, 1);
             gameboard.receiveAttack(board, 0, 2);
             gameboard.receiveAttack(board, 1, 2);
-            gameboard.receiveAttack(board, 2, 2);
             gameboard.receiveAttack(board, 0, 3);
             gameboard.receiveAttack(board, 1, 3);
-            gameboard.receiveAttack(board, 2, 3);
-            gameboard.receiveAttack(board, 3, 3);
             gameboard.receiveAttack(board, 0, 4);
             gameboard.receiveAttack(board, 1, 4);
-            gameboard.receiveAttack(board, 2, 4);
-            gameboard.receiveAttack(board, 3, 4);
-            gameboard.receiveAttack(board, 4, 4);
 
             expect(gameboard.checkWinner()).toBeTruthy();
-        });
-        test("Check winner when one part attacked", () => {
-            const gameboard = Gameboard();
-            const board = gameboard.getBoard();
-
-            gameboard.placeShip(board, 0, 0, 2, "H");
-            gameboard.receiveAttack(board, 0, 0);
-            expect(gameboard.checkWinner()).toBeFalsy();
         });
         test("check winner when not all ships are sunk", () => {
             const gameboard = Gameboard();
             const board = gameboard.getBoard();
 
             gameboard.placeShip(board, 0, 0, 2, "H");
-            gameboard.placeShip(board, 0, 1, 3, "H");
-            gameboard.placeShip(board, 0, 2, 3, "H");
-            gameboard.placeShip(board, 0, 3, 4, "H");
-            gameboard.placeShip(board, 0, 4, 5, "H");
+            gameboard.placeShip(board, 0, 1, 2, "H");
+            gameboard.placeShip(board, 0, 2, 2, "H");
+            gameboard.placeShip(board, 0, 3, 2, "H");
+            gameboard.placeShip(board, 0, 4, 2, "H");
             gameboard.receiveAttack(board, 0, 0);
             gameboard.receiveAttack(board, 1, 0);
             gameboard.receiveAttack(board, 0, 1);
             gameboard.receiveAttack(board, 1, 1);
-            gameboard.receiveAttack(board, 2, 1);
             gameboard.receiveAttack(board, 0, 2);
             gameboard.receiveAttack(board, 1, 2);
-            gameboard.receiveAttack(board, 2, 2);
-            gameboard.receiveAttack(board, 0, 3);
-            gameboard.receiveAttack(board, 1, 3);
-            gameboard.receiveAttack(board, 2, 3);
-            gameboard.receiveAttack(board, 3, 3);
+
             expect(gameboard.checkWinner()).toBeFalsy();
         });
     });
