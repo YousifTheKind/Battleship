@@ -1,6 +1,6 @@
 export default function Ship(length) {
     if (2 > length > 5) {
-        throw new Error("Ship length should be between 1 & 4");
+        throw new Error("Ship length should be between 2 & 5");
     }
 
     let timesHit = 0;

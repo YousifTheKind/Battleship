@@ -1,16 +1,21 @@
 import Ship from "./Ship.js";
 export function Gameboard() {
-    const board = [];
     const ships = [];
-    for (let i = 0; i < 100; i++) {
-        board[i] = {
-            x: i % 10,
-            y: Math.floor(i / 10),
-            ship: null,
-            hit: false,
-            miss: false,
-        };
+    function getNewBoard() {
+        const board = [];
+
+        for (let i = 0; i < 100; i++) {
+            board[i] = {
+                x: i % 10,
+                y: Math.floor(i / 10),
+                ship: null,
+                hit: false,
+                miss: false,
+            };
+        }
+        return board;
     }
+    const board = getNewBoard();
     const placeShip = (board, x, y, length, orientation) => {
         let changed = false;
         let errorMsg = null;
@@ -125,5 +130,5 @@ export function Gameboard() {
     };
     const getBoard = () => board;
 
-    return { getBoard, placeShip, receiveAttack, checkWinner };
+    return { getBoard, placeShip, receiveAttack, checkWinner, getNewBoard };
 }

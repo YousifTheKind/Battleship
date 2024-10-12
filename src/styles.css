@@ -95,18 +95,16 @@ header {
 .real-player-square:first-child > .column {
     bottom: 3.5em;
 }
-#ship-hit::before {
-    content: "❌";
-    width: 200px;
-    height: 200px;
-}
 #ship-hit {
+    background-image: url("../assests/images/rcLxML7Ri.png");
+    background-size: 40px;
     border: red 1px solid;
 }
 
 #ship-miss {
-    background-color: rgb(255, 255, 118) !important;
-    content: "s";
+    background-color: rgb(255, 255, 118, 0.5) !important;
+
+    content: "*";
 }
 .action-buttons {
     display: flex;

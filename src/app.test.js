@@ -148,7 +148,6 @@ describe("Gameboard", () => {
             gameboard.receiveAttack(board, 1, 1);
             gameboard.receiveAttack(board, 0, 2);
             gameboard.receiveAttack(board, 1, 2);
-
             expect(gameboard.checkWinner()).toBeFalsy();
         });
     });

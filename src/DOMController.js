@@ -1,37 +1,22 @@
-import { Player } from "./Player.js";
-const realPlayerBoardElm = document.querySelector(".real-player-board");
-const botPlayerBoardElm = document.querySelector(".bot-player-board");
-const realPtlayerBoard = newGame().realPlayerBoard;
-const botPlayerBoard = newGame().botPlayerBoard;
-const botPlayerGameboard = newGame().botPlayerGameboard;
+import { Game } from "./GameController.js";
+const realPlayerBoardElement = document.querySelector(".real-player-board");
+const botPlayerBoardElement = document.querySelector(".bot-player-board");
+const instructionElement = document.querySelector(".instructions-message");
+const mainElement = document.querySelector(".main");
+const resetButton = document.querySelector(".reset-button");
+const realPlayerGameboard = Game().getRealPlayerGameboard();
+let realPlayerBoard = realPlayerGameboard.getBoard();
+const botPlayerGameboard = Game().getRealPlayerGameboard();
+let botPlayerBoard = botPlayerGameboard.getBoard();
 
-function newGame() {
-    const realPlayer = Player();
-    const realPlayerGameboard = realPlayer.Gameboard;
-    const realPlayerBoard = realPlayerGameboard.getBoard();
-    realPlayerGameboard.placeShip(realPlayerBoard, 0, 0, 2, "H");
-    console.log(
-        realPlayerGameboard.placeShip(realPlayerBoard, 0, 2, 3, "H").errorMsg
-    );
-    console.log(
-        realPlayerGameboard.placeShip(realPlayerBoard, 0, 4, 3, "H").errorMsg
-    );
-    realPlayerGameboard.placeShip(realPlayerBoard, 0, 6, 4, "H");
-    realPlayerGameboard.placeShip(realPlayerBoard, 0, 8, 5, "H");
-    const botPlayer = Player();
-    const botPlayerGameboard = botPlayer.Gameboard;
-    const botPlayerBoard = botPlayerGameboard.getBoard();
-    botPlayerGameboard.placeShip(botPlayerBoard, 1, 2, 2, "V");
-    botPlayerGameboard.placeShip(botPlayerBoard, 3, 2, 3, "V");
-    botPlayerGameboard.placeShip(botPlayerBoard, 5, 2, 3, "V");
-    botPlayerGameboard.placeShip(botPlayerBoard, 7, 2, 4, "V");
-    botPlayerGameboard.placeShip(botPlayerBoard, 9, 2, 5, "V");
-
-    return { botPlayerBoard, realPlayerBoard, botPlayerGameboard };
+function updateInstructions(message) {
+    instructionElement.textContent = message;
 }
-function renderRealPlayerBoard(board) {
-    realPlayerBoardElm.replaceChildren();
-    board.forEach((square, index) => {
+function renderRealPlayerBoard() {
+    realPlayerBoardElement.replaceChildren();
+    console.log(realPlayerBoard);
+
+    realPlayerBoard.forEach((square, index) => {
         const sq = document.createElement("button");
         sq.dataset.row = square.y;
         sq.dataset.column = square.x;
@@ -53,12 +38,22 @@ function renderRealPlayerBoard(board) {
         if (square.ship) {
             sq.classList.add("ships");
         }
-        realPlayerBoardElm.appendChild(sq);
+        if (square.hit) {
+            sq.id = "ship-hit";
+        }
+        if (square.miss) {
+            sq.id = "ship-miss";
+        }
+        if (square.hit || square.miss) {
+            sq.className = "disabled-square";
+        }
+
+        realPlayerBoardElement.appendChild(sq);
     });
 }
-function renderBotPlayerBoard(board) {
-    botPlayerBoardElm.replaceChildren();
-    board.forEach((square, index) => {
+function renderBotPlayerBoard() {
+    botPlayerBoardElement.replaceChildren();
+    botPlayerBoard.forEach((square, index) => {
         const sq = document.createElement("button");
         sq.dataset.row = square.y;
         sq.dataset.column = square.x;
@@ -88,19 +83,47 @@ function renderBotPlayerBoard(board) {
         if (square.hit || square.miss) {
             sq.className = "disabled-square";
         }
-        botPlayerBoardElm.appendChild(sq);
+        botPlayerBoardElement.appendChild(sq);
     });
 }
-
-botPlayerBoardElm.addEventListener("click", (e) => {
+function handleGameOver(winner) {
+    updateInstructions("Game Over!");
+    mainElement.replaceChildren();
+    const winMsg = document.createElement("div");
+    winMsg.textContent = `Game Over\n ${winner} Won! \n click reset to play again`;
+}
+function botAttackDOM() {
+    updateInstructions("Computer turn to attack");
+    mainElement.classList.add("disabled-square");
+    setTimeout(() => {
+        Game().botAttack(realPlayerBoard);
+        if (realPlayerGameboard.checkWinner()) {
+            handleGameOver("Your Opponent");
+        } else {
+            mainElement.classList.remove("disabled-square");
+            renderRealPlayerBoard(realPlayerBoard);
+            updateInstructions("Your turn to attack");
+        }
+    }, 1000);
+}
+botPlayerBoardElement.addEventListener("click", (e) => {
     const y = e.target.dataset.row;
     const x = e.target.dataset.column;
     if (x && y) {
-        console.log(x, y);
-
-        console.log(botPlayerGameboard.receiveAttack(botPlayerBoard, x, y));
+        botPlayerGameboard.receiveAttack(botPlayerBoard, x, y);
+        if (botPlayerGameboard.checkWinner()) {
+            handleGameOver("You");
+        }
         renderBotPlayerBoard(botPlayerBoard);
+        botAttackDOM();
     }
 });
 
-export { renderBotPlayerBoard, renderRealPlayerBoard, newGame };
+resetButton.addEventListener("click", () => {
+    realPlayerBoard = realPlayerGameboard.getNewBoard();
+    botPlayerBoard = botPlayerGameboard.getNewBoard();
+    renderBotPlayerBoard();
+    renderRealPlayerBoard();
+});
+renderBotPlayerBoard();
+renderRealPlayerBoard();
