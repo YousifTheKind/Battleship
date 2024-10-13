@@ -7,8 +7,8 @@
     "scripts": {
         "test": "jest",
         "watch": "webpack --watch",
-        "start": "webpack serve --open",
-        "build": "webpack",
+        "start": "webpack serve --open --config webpack.dev.cjs",
+        "build": "webpack --config webpack.prod.cjs",
         "gh-pages": "git subtree push --prefix dist origin gh-pages"
     },
     "author": "",
@@ -29,6 +29,7 @@
         "style-loader": "^4.0.0",
         "webpack": "^5.93.0",
         "webpack-cli": "^5.1.4",
-        "webpack-dev-server": "^5.0.4"
+        "webpack-dev-server": "^5.0.4",
+        "webpack-merge": "^6.0.1"
     }
 }
