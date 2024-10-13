@@ -49,9 +49,6 @@ function render(board, player) {
             realPlayerBoardElement.appendChild(sq);
         } else {
             sq.className = "bot-player-square";
-            if (square.ship) {
-                sq.classList.add("ships");
-            }
             botPlayerBoardElement.appendChild(sq);
         }
     });
@@ -124,7 +121,7 @@ form.addEventListener("submit", (e) => {
 
         form.reset();
         renderRealPlayerBoard();
-        if (realPlayerGameboard.getNumberOfShips() == 1) {
+        if (realPlayerGameboard.getNumberOfShips() == 5) {
             botPlayerBoardElement.classList.remove("disabled-square");
             realPlayerBoardElement.classList.remove("disabled-square");
             updateInstructions("Your turn to attack");
