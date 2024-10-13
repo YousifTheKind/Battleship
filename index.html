@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Battleship</title>
+    <script defer src="bundle.js"></script></head>
+    <body>
+        <div class="container">
+            <header>
+                <div class="logo">Battleship</div>
+                <div class="instructions-bar">
+                    <div class="instructions-message">Place Your 5 Ships</div>
+                </div>
+            </header>
+            <div class="main">
+                <div class="real-player-container">
+                    <div class="real-player-board disabled-square"></div>
+                    <div class="real-player-board-text">Your Board</div>
+                </div>
+                <div class="ships-form">
+                    <form action="">
+                        <label for="row">Row</label>
+                        <input
+                            type="number"
+                            min="0"
+                            max="9"
+                            name="row"
+                            id="row"
+                            required
+                        />
+                        <label for="column">Column</label>
+                        <input
+                            type="number"
+                            min="0"
+                            max="9"
+                            name="column"
+                            id="column"
+                            required
+                        />
+                        <label for="length">Select Ship Length</label>
+                        <select name="length" id="length" required>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                        <label for="orientation">Select Ship Orientation</label>
+                        <select name="orientation" id="orientation" required>
+                            <option value="H">Horizontally</option>
+                            <option value="V">Vertically</option>
+                        </select>
+
+                        <button class="place-ship-button">Place Ship</button>
+                    </form>
+                </div>
+                <div class="bot-player-board-container">
+                    <div class="bot-player-board disabled-square"></div>
+                    <div class="bot-player-board-text">Opponent's Board</div>
+                </div>
+            </div>
+            <div class="action-buttons">
+                <button class="reset-button">Reset</button>
+            </div>
+        </div>
+    </body>
+</html>
