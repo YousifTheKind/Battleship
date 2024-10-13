@@ -9,6 +9,7 @@ describe("Ship", () => {
         expect(ship.IsSunk()).toBe(false);
         ship.hit();
         expect(ship.IsSunk()).toBe(true);
+        expect(ship.getTimesHit()).toBe(2);
     });
 });
 
@@ -86,10 +87,10 @@ describe("Gameboard", () => {
             gameboard.placeShip(board, x, y, 3, "H");
             expect(board[indexOfSquare].ship.getTimesHit()).toEqual(0);
             const attackObject = gameboard.receiveAttack(board, x, y);
+            expect(attackObject.errorMsg).toBeFalsy();
             expect(board[indexOfSquare].ship.getTimesHit()).toEqual(1);
             expect(board[indexOfSquare].hit).toBeTruthy();
             expect(board[indexOfSquare].miss).toBeFalsy();
-            expect(attackObject.errorMsg).toBeFalsy();
         });
         test("Attacking a square with no ship", () => {
             const attackObject = gameboard.receiveAttack(board, x, y);
@@ -112,42 +113,16 @@ describe("Gameboard", () => {
     });
     describe("check winner", () => {
         test("Check winner when all ships are sunk", () => {
-            const gameboard = Gameboard();
-            const board = gameboard.getBoard();
-
             gameboard.placeShip(board, 0, 0, 2, "H");
-            gameboard.placeShip(board, 0, 1, 2, "H");
-            gameboard.placeShip(board, 0, 2, 2, "H");
-            gameboard.placeShip(board, 0, 3, 2, "H");
-            gameboard.placeShip(board, 0, 4, 2, "H");
             gameboard.receiveAttack(board, 0, 0);
             gameboard.receiveAttack(board, 1, 0);
-            gameboard.receiveAttack(board, 0, 1);
-            gameboard.receiveAttack(board, 1, 1);
-            gameboard.receiveAttack(board, 0, 2);
-            gameboard.receiveAttack(board, 1, 2);
-            gameboard.receiveAttack(board, 0, 3);
-            gameboard.receiveAttack(board, 1, 3);
-            gameboard.receiveAttack(board, 0, 4);
-            gameboard.receiveAttack(board, 1, 4);
-
             expect(gameboard.checkWinner()).toBeTruthy();
         });
         test("check winner when not all ships are sunk", () => {
-            const gameboard = Gameboard();
-            const board = gameboard.getBoard();
-
             gameboard.placeShip(board, 0, 0, 2, "H");
             gameboard.placeShip(board, 0, 1, 2, "H");
-            gameboard.placeShip(board, 0, 2, 2, "H");
-            gameboard.placeShip(board, 0, 3, 2, "H");
-            gameboard.placeShip(board, 0, 4, 2, "H");
             gameboard.receiveAttack(board, 0, 0);
             gameboard.receiveAttack(board, 1, 0);
-            gameboard.receiveAttack(board, 0, 1);
-            gameboard.receiveAttack(board, 1, 1);
-            gameboard.receiveAttack(board, 0, 2);
-            gameboard.receiveAttack(board, 1, 2);
             expect(gameboard.checkWinner()).toBeFalsy();
         });
     });
