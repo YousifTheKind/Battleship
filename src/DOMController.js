@@ -33,23 +33,34 @@ function render(board, player) {
             sq.appendChild(colIndex);
         }
         if (square.hit || square.miss) {
-            sq.className = "disabled-square";
+            sq.classList.add("disabled-square");
             if (square.hit) {
-                sq.id = "ship-hit";
+                // sq.id = "ship-hit";
+                sq.classList.add("ship-hit");
+                console.log(square.ship.IsSunk());
+
+                if (square.ship.IsSunk()) {
+                    sq.classList.add("sunk-ship");
+                    sq.classList.remove("ships");
+                }
             }
             if (square.miss) {
-                sq.id = "ship-miss";
+                // sq.id = "ship-miss";
+                sq.classList.add("ship-miss");
             }
         }
         if (player == "real") {
-            sq.className = "real-player-square";
+            sq.classList.add("real-player-square");
             if (square.ship) {
                 sq.classList.add("ships");
             }
             realPlayerBoardElement.appendChild(sq);
         } else {
-            sq.className = "bot-player-square";
+            sq.classList.add("bot-player-square");
             botPlayerBoardElement.appendChild(sq);
+            if (square.ship) {
+                sq.classList.add("ships");
+            }
         }
     });
 }
@@ -132,7 +143,7 @@ form.addEventListener("submit", (e) => {
 
         form.reset();
         renderRealPlayerBoard();
-        if (realPlayerGameboard.getNumberOfShips() == 5) {
+        if (realPlayerGameboard.getNumberOfShips() == 1) {
             startGame();
         }
     }

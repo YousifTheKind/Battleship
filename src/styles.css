@@ -30,6 +30,7 @@ header {
     display: flex;
     gap: 75px;
     flex-wrap: wrap;
+    justify-content: center;
 }
 .logo {
     font-size: 64px;
@@ -96,14 +97,22 @@ header {
 .real-player-square:first-child > .column {
     bottom: 3.5em;
 }
-#ship-hit {
+.ships {
+    background-color: rgb(77, 77, 81, 0.5);
+}
+
+.ship-hit {
     background-image: url("../assests/images/rcLxML7Ri.png");
     background-size: 40px;
     border: red 1px solid;
 }
-
-#ship-miss {
-    background-color: rgb(255, 255, 118, 0.5);
+.sunk-ship {
+    background-color: green;
+    background-size: 0px;
+    border: 0px;
+}
+.ship-miss {
+    background-color: rgb(255, 255, 118, 0.4);
 }
 .action-buttons {
     display: flex;
@@ -121,9 +130,6 @@ header {
     filter: alpha(opacity=65);
     -webkit-box-shadow: none;
     box-shadow: none;
-}
-.ships {
-    background-color: rgb(77, 77, 81, 0.5) !important;
 }
 .place-ship-button,
 .reset-button,
