@@ -42,6 +42,7 @@ header {
 }
 .instructions-message {
     color: white;
+    font-weight: bold;
 }
 .real-player-square {
     width: 40px;

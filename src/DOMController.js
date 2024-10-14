@@ -100,6 +100,17 @@ botPlayerBoardElement.addEventListener("click", (e) => {
 resetButton.addEventListener("click", () => {
     document.location.reload();
 });
+function startGame() {
+    botPlayerBoardElement.classList.remove("disabled-square");
+    realPlayerBoardElement.classList.remove("disabled-square");
+    form.classList.add("disabled-square");
+    updateInstructions("GAME STARTED!");
+
+    setTimeout(() => {
+        updateInstructions("Click on the board to attack");
+    }, 2000);
+}
+
 form.addEventListener("submit", (e) => {
     e.preventDefault();
     form.reportValidity();
@@ -122,11 +133,10 @@ form.addEventListener("submit", (e) => {
         form.reset();
         renderRealPlayerBoard();
         if (realPlayerGameboard.getNumberOfShips() == 5) {
-            botPlayerBoardElement.classList.remove("disabled-square");
-            realPlayerBoardElement.classList.remove("disabled-square");
-            updateInstructions("Your turn to attack");
+            startGame();
         }
     }
 });
+
 renderBotPlayerBoard();
 renderRealPlayerBoard();
