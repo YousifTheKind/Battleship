@@ -1,6 +1,5 @@
 import { Player } from "./Player.js";
 export function Game() {
-    const botAttacks = [];
     const realPlayer = Player();
     const botPlayer = Player();
     function placeBotShips() {
@@ -28,22 +27,23 @@ export function Game() {
     }
     function botAttack(board) {
         const getRandomPoint = () => {
-            const x = Math.floor(Math.random() * 9);
-            const y = Math.floor(Math.random() * 9);
-            return [x, y];
+            const x = Math.floor(Math.random() * 10);
+            const y = Math.floor(Math.random() * 10);
+            return { x, y };
+        };
+        const getSquare = (x, y) => {
+            return board.find((sq) => sq.x == x && sq.y == y);
         };
         let randomPoint = getRandomPoint();
 
-        while (botAttacks.includes(randomPoint)) {
+        while (
+            getSquare(randomPoint.x, randomPoint.y).hit ||
+            getSquare(randomPoint.x, randomPoint.y).miss
+        ) {
             randomPoint = getRandomPoint();
         }
 
-        realPlayer.Gameboard.receiveAttack(
-            board,
-            randomPoint[0],
-            randomPoint[1]
-        );
-        botAttacks.push(randomPoint);
+        realPlayer.Gameboard.receiveAttack(board, randomPoint.x, randomPoint.y);
     }
 
     const getRealPlayerGameboard = () => realPlayer.Gameboard;

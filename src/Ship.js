@@ -9,7 +9,7 @@ export default function Ship(length) {
     };
 
     const IsSunk = () => {
-        return length === timesHit ? true : false;
+        return length == timesHit ? true : false;
     };
     const getTimesHit = () => timesHit;
     return {

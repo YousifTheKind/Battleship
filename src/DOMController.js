@@ -35,17 +35,13 @@ function render(board, player) {
         if (square.hit || square.miss) {
             sq.classList.add("disabled-square");
             if (square.hit) {
-                // sq.id = "ship-hit";
                 sq.classList.add("ship-hit");
-                console.log(square.ship.IsSunk());
 
                 if (square.ship.IsSunk()) {
                     sq.classList.add("sunk-ship");
-                    sq.classList.remove("ships");
                 }
             }
             if (square.miss) {
-                // sq.id = "ship-miss";
                 sq.classList.add("ship-miss");
             }
         }
@@ -58,9 +54,6 @@ function render(board, player) {
         } else {
             sq.classList.add("bot-player-square");
             botPlayerBoardElement.appendChild(sq);
-            if (square.ship) {
-                sq.classList.add("ships");
-            }
         }
     });
 }
@@ -73,22 +66,19 @@ function renderBotPlayerBoard() {
     render(botPlayerBoard, "bot");
 }
 function handleGameOver(winner) {
-    updateInstructions("Game Over!");
-    mainElement.replaceChildren();
-    const winMsg = document.createElement("div");
-    winMsg.textContent = `${winner} Won! \n click reset to play again`;
-    mainElement.appendChild(winMsg);
+    updateInstructions(`${winner} Won!`);
+    mainElement.classList.add("disabled-square");
 }
 function botAttackDOM() {
     updateInstructions("Computer turn to attack");
     mainElement.classList.add("disabled-square");
     setTimeout(() => {
         Game().botAttack(realPlayerBoard);
+        renderRealPlayerBoard(realPlayerBoard);
         if (realPlayerGameboard.checkWinner()) {
             handleGameOver("Your Opponent");
         } else {
             mainElement.classList.remove("disabled-square");
-            renderRealPlayerBoard(realPlayerBoard);
             updateInstructions("Your turn to attack");
         }
     }, 500);
@@ -143,7 +133,7 @@ form.addEventListener("submit", (e) => {
 
         form.reset();
         renderRealPlayerBoard();
-        if (realPlayerGameboard.getNumberOfShips() == 1) {
+        if (realPlayerGameboard.getNumberOfShips() == 5) {
             startGame();
         }
     }
