@@ -8,3 +8,5 @@ If you have never played Battleship, here's how it works:
 3. Your goal is sink all your opponent's ships.
 4. The computer will randomly attack your board the same way.
 5. Who ever sinks all their opponent's ships win.
+
+<a href="https://www.flaticon.com/free-icons/battleship" title="battleship icons">Battleship icons created by Umeicon - Flaticon</a>
